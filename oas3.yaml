@@ -427,6 +427,11 @@ components:
         description:
           type: string
           description: "Descrição da Feature"
+          nullable: true 
+        version:
+          Adicdescription: "Versão da Feature utilizando o padrão [SemVer](https://semver.org/)"
+          type: string
+          description: "Nome da Feature"
           nullable: true          
         sqlConnection:
           description: "Nome da conexão SQL"
