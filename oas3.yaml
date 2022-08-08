@@ -133,7 +133,7 @@ paths:
   /api/v1/Features/featureId/Preview:
     get:
       summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
-      description: "Retorna as informações simplificadas para visualização na listagem quando a Feature é selecionada"
+      description: "Retorna as informações simplificadas (Sempre será utilizada a última versão) para visualização na listagem quando a Feature é selecionada."
       tags:
         - CustomerEntities
       parameters:
@@ -162,7 +162,7 @@ paths:
   /api/v1/Features/Lookup:   
     get:
       summary: Recupera a listagem de Features sem Paginação e filtros (Em desenvolvimento)
-      description: "Utilizar na listagem de combos/lookups de feature"
+      description: "Utilizar na listagem de combos/lookups"
       tags:
         - CustomerEntities
       responses:
@@ -184,7 +184,7 @@ paths:
   /api/v1/Features/featureId/Version/Lookup:   
     get:
       summary: Recupera a listagem de Versões da Feature sem Paginação e filtros (Em desenvolvimento)
-      description: "Utilizar na listagem de combos/lookups de feature version"
+      description: "Utilizar na listagem de combos/lookups"
       parameters:
         - name: featureId
           in: path
@@ -214,7 +214,7 @@ paths:
   /api/v1/Features/featureId/Version/featureVersionId/Variable/Lookup:   
     get:
       summary: Recupera a listagem de Versões da Feature sem Paginação e filtros (Aguardando desenvolvimento)
-      description: "Utilizar na listagem de combos/lookups de feature variable"
+      description: "Utilizar na listagem de combos/lookups"
       parameters:
         - name: featureId
           in: path
@@ -247,7 +247,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '500':
-          description: Server Error              
+          description: Server Error    
+  /api/v1/Fields/Lookup:   
+    get:
+      summary: Recupera a listagem de Fields sem Paginação e filtros (Em desenvolvimento)
+      description: "Utilizar na listagem de combos/lookups"
+      tags:
+        - CustomerEntities
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Feature.Commands.Get.FeatureLookupResponse]]
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: Server Error            
   /api/v1/StatisticalModels:
     post:
       tags:
