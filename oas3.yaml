@@ -456,6 +456,12 @@ components:
         name:
           type: string
           description: "Nome da Feature"
+        description:
+          type: string
+          description: "Descrição da Feature"
+        tags:
+          type: string
+          description: "Tags da Feature"  
       additionalProperties: false  
     Decision.Configuration.Application.Features.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Feature.Commands.Get.FeatureLookupResponse]]:
       type: array
