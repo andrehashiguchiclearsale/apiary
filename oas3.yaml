@@ -261,7 +261,7 @@ paths:
             application/json:
               schema:
                 $ref: >-
-                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Feature.Commands.Get.FeatureLookupResponse]]
+                  #/components/schemas/Decision.Configuration.Application.Fields.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Fields.Commands.Get.FieldsLookupResponse]]
         '400':
           description: Bad Request
           content:
@@ -526,7 +526,24 @@ components:
       items:
         $ref: '#/components/schemas/Decision.Configuration.Application.Features.Commands.Get.FeatureVariableLookupResponse'
       nullable: true
-      additionalProperties: false        
+      additionalProperties: false 
+    Decision.Configuration.Application.Fields.Commands.Get.FieldsLookupResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Identificador do Field"
+          nullable: uuid 
+        name:
+          type: string
+          description: "Nome do Field"
+      additionalProperties: false  
+    Decision.Configuration.Application.Fields.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Fields.Commands.Get.FieldsLookupResponse]]:
+      type: array
+      items:
+        $ref: '#/components/schemas/Decision.Configuration.Application.Fields.Commands.Get.FieldsLookupResponse'
+      nullable: true
+      additionalProperties: false      
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand:
       type: object
       properties:
