@@ -269,7 +269,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '500':
-          description: Server Error            
+          description: Server Error
+  /api/v1/SqlConnection/Lookup:   
+    get:
+      summary: Recupera a listagem de Sql Connection sem Paginação e filtros (Em desenvolvimento)
+      description: "Utilizar na listagem de combos/lookups"
+      tags:
+        - CustomerEntities
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.SqlConnections.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse]]
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: Server Error              
   /api/v1/StatisticalModels:
     post:
       tags:
@@ -543,7 +565,24 @@ components:
       items:
         $ref: '#/components/schemas/Decision.Configuration.Application.Fields.Commands.Get.FieldsLookupResponse'
       nullable: true
-      additionalProperties: false      
+      additionalProperties: false    
+    Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Identificador do SqlConnection"
+          nullable: uuid 
+        name:
+          type: string
+          description: "Nome do SqlConnection"
+      additionalProperties: false  
+    Decision.Configuration.Application.SqlConnections.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse]]:
+      type: array
+      items:
+        $ref: '#/components/schemas/Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse'
+      nullable: true
+      additionalProperties: false       
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand:
       type: object
       properties:
