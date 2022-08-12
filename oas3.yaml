@@ -296,7 +296,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '500':
-          description: Server Error    
+          description: Server Error
+  /api/v1/Features/UpdateChain:   
+    post:
+      summary: Realiza a atualização em cascata da Feature (Em desenvolvimento)
+      description: "Utilizar para atualizar nos orquestratores que a Feature é utilizada"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.UpdateChain
+          text/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.UpdateChain
+          application/*+json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.UpdateChain              
+      tags:
+        - Features
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Feature.Commands.Get.FeatureVariableLookupResponse]]
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: Server Error        
   /api/v1/Fields/Lookup:   
     get:
       summary: Recupera a listagem de Fields sem Paginação e filtros (Em desenvolvimento)
@@ -345,6 +382,14 @@ paths:
     get:
       summary: Recupera a listagem de Orquestratores com suas entidades vinculadas filtradas por uma Feature (Em desenvolvimento).
       description: "Utilizar na atualização em cascata de Feature.por id"
+      parameters:
+        - name: featureVersionId
+          in: path
+          required: true
+          description: "Identificador da Versão da Feature"
+          schema:
+            type: string
+            format: uuid  
       tags:
         - Orchestrator
       responses:
@@ -354,7 +399,7 @@ paths:
             application/json:
               schema:
                 $ref: >-
-                  #/components/schemas/Decision.Configuration.Application.SqlConnections.Commands.Get`1[System.Collections.Generic.List`1[Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse]]
+                  #/components/schemas/Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities
         '400':
           description: Bad Request
           content:
@@ -653,7 +698,35 @@ components:
       items:
         $ref: '#/components/schemas/Decision.Configuration.Application.SqlConnections.Commands.Get.SqlConnectionsLookupResponse'
       nullable: true
-      additionalProperties: false       
+      additionalProperties: false
+    Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Identificador do Orquestrator"
+          nullable: uuid
+        name:
+          type: string
+          description: "Nome do Orquestrator"
+          nullable: true
+        Entities:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities
+          nullable: true
+    Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities: 
+      type: object
+      properties:
+        EntityId:
+          type: string
+          description: "Identificador da Entidade"
+          nullable: uuid
+        name:
+          type: string
+          description: "Nome da Entidade"
+          nullable: true
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand:
       type: object
       properties:
@@ -821,6 +894,27 @@ components:
         - 1
       type: integer
       format: int32
+    Decision.Configuration.Application.Features.Commands.UpdateChain: 
+      type: object
+      properties:
+        featureId:
+          type: string
+          nullable: true
+        featureVersionId:
+          type: string
+          nullable: true
+        Orchestrators:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/Decision.Configuration.Application.Orchestrator.Commands.UpdateChainOrchestrator
+          nullable: true
+    Decision.Configuration.Application.Orchestrator.Commands.UpdateChainOrchestrator:
+      type: object
+      properties:
+        OrchestratorId:
+          type: string
+          nullable: true
     Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand:
       type: object
       properties:
