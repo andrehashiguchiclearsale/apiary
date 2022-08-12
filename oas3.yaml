@@ -130,6 +130,62 @@ paths:
           description: Retorna o novo item criado
         '400':
           description: Se o item não for criado
+    put:
+      tags:
+        - Features
+      summary: Atualiza uma Feature.
+      description: "Atualiza uma Feature"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+          text/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+          application/*+json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+      responses:
+        '200':
+          description: Success
+        '201':
+          description: Retorna o novo item criado
+        '400':
+          description: Se o item não for criado
+  /api/v1/Features/featureId:
+    get:
+      summary: Recupera os dados de uma feature. (Em desenvolvimento)
+      description: "Retorna as informações completas de Feature (Sempre será utilizada a última versão)."
+      tags:
+        - Features
+      parameters:
+        - name: featureId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: Server Error        
   /api/v1/Features/featureId/Preview:
     get:
       summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
@@ -617,6 +673,101 @@ components:
           $ref: >-
             #/components/schemas/Decision.Configuration.Application.Users.UserInformation
       additionalProperties: false
+    Decision.Configuration.Application.Features.Commands.Base.FeatureCommand:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: uuid
+          format: uuid
+        versionId:
+          type: string
+          nullable: uuid
+          format: uuid
+        key:
+          type: string
+          nullable: true  
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true  
+        caosName:
+          type: string
+          nullable: true
+        tags:
+          type: string
+          nullable: true
+        creationUserId:
+          type: string
+          nullable: true
+        lastUpdateUserId:
+          type: string
+          nullable: true
+        createdDate:
+          type: string
+          format: date-time
+        lastUpdatedDate:
+          type: string
+          format: date-time
+        sqlCode:
+          type: string  
+        sqlConnectionId:
+          type: string
+          format: uuid
+        sqlConnectionName:
+          type: string
+        deprecated:
+          type: boolean 
+        status:
+          type: string
+        version:
+          type: string   
+        dependencies:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/Decision.Configuration.Application.Features.Commands.Create.UpdateFeatureDependencyCommand
+          nullable: true
+        schemaName:
+          type: string
+          nullable: true
+        timeout:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false 
+    Decision.Configuration.Application.Features.Commands.Create.UpdateFeatureDependencyCommand:
+      type: object
+      properties:
+        source:
+          $ref: >-
+            #/components/schemas/Decision.Configuration.Application.Features.UpdateDependencyType
+        outputId:
+          type: string
+          format: uuid
+        alias:
+          type: string
+          nullable: true
+        resource:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+        output:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Decision.Configuration.Application.Features.UpdateDependencyType:
+      enum: [0, 1]
+      x-enumNames: [Field, Feature]
+      type: integer
+      format: int32
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand:
       type: object
       properties:
