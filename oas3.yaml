@@ -300,7 +300,7 @@ paths:
   /api/v1/Features/UpdateChain:   
     post:
       summary: Realiza a atualização em cascata da Feature (Em desenvolvimento)
-      description: "Utilizar para atualizar nos orquestratores que a Feature é utilizada"
+      description: "Utilizar para atualizar os orquestratores que a Feature é utilizada"
       requestBody:
         description: ''
         content:
@@ -842,27 +842,26 @@ components:
         outputId:
           type: string
           format: uuid
+          description: "Id da dependência (Field ou Feature)"
         alias:
           type: string
           nullable: true
+          description: "Alias da dependência (No caso de Field é o nome)"
         resource:
           type: string
           nullable: true
+          description: "Name da Feature"
         version:
           type: string
           nullable: true
-        output:
-          type: string
-          nullable: true
-        type:
-          type: string
-          nullable: true
+          description: "versão da Feature"
       additionalProperties: false
     Decision.Configuration.Application.Features.UpdateDependencyType:
       enum: [0, 1]
       x-enumNames: [Field, Feature]
       type: integer
       format: int32
+      description: "0 - Field | 1 - Feature"
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand:
       type: object
       properties:
@@ -892,6 +891,7 @@ components:
       enum:
         - 0
         - 1
+      description: "0 - Field | 1 - Feature"
       type: integer
       format: int32
     Decision.Configuration.Application.Features.Commands.UpdateChain: 
