@@ -21,7 +21,7 @@ paths:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand
-          application/*+json:
+          application/json:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand
@@ -119,37 +119,10 @@ paths:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand
-          application/*+json:
-            schema:
-              $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand
-      responses:
-        '200':
-          description: Success
-        '201':
-          description: Retorna o novo item criado
-        '400':
-          description: Se o item não for criado
-    put:
-      tags:
-        - Features
-      summary: Atualiza uma Feature.
-      description: "Atualiza uma Feature"
-      requestBody:
-        description: ''
-        content:
           application/json:
             schema:
               $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
-          text/json:
-            schema:
-              $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
-          application/*+json:
-            schema:
-              $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand
       responses:
         '200':
           description: Success
@@ -177,7 +150,7 @@ paths:
             application/json:
               schema:
                 $ref: >-
-                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.FeatureCommand
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.GetFeatureCommand
         '400':
           description: Bad Request
           content:
@@ -185,7 +158,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '500':
-          description: Server Error        
+          description: Server Error
+    put:
+      tags:
+        - Features
+      parameters:
+        - name: featureId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid        
+      summary: Atualiza uma Feature. (Aguardando desenvolvimento)
+      description: "Atualiza uma Feature."
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
+          text/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
+      responses:
+        '200':
+          description: Success
+        '201':
+          description: Retorna o novo item criado
+        '400':
+          description: Se o item não for criado          
   /api/v1/Features/featureId/Preview:
     get:
       summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
@@ -425,7 +432,7 @@ paths:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand
-          application/*+json:
+          application/json:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand
@@ -551,7 +558,7 @@ components:
         id:
           type: string
           description: "Identificador da Feature"
-          nullable: uuid      
+          format: uuid      
         name:
           type: string
           description: "Nome da Feature"
@@ -579,7 +586,7 @@ components:
         id:
           type: string
           description: "Identificador da Feature"
-          nullable: uuid       
+          format: uuid       
         name:
           type: string
           description: "Nome da Feature"
@@ -612,7 +619,7 @@ components:
         id:
           type: string
           description: "Identificador da Feature"
-          nullable: uuid 
+          format: uuid
         name:
           type: string
           description: "Nome da Feature"
@@ -632,7 +639,7 @@ components:
         id:
           type: string
           description: "Identificador da FeatureVersion"
-          nullable: uuid 
+          format: uuid 
         version:
           type: string
           description: "Versão da Feature utilizando o padrão [SemVer](https://semver.org/)"
@@ -650,7 +657,7 @@ components:
         id:
           type: string
           description: "Identificador da Feature Variable"
-          nullable: uuid 
+          format: uuid
         name:
           type: string
           description: "Nome da Feature Variable"
@@ -668,7 +675,7 @@ components:
         id:
           type: string
           description: "Identificador do Field"
-          nullable: uuid 
+          format: uuid 
         name:
           type: string
           description: "Nome do Field"
@@ -688,7 +695,7 @@ components:
         id:
           type: string
           description: "Identificador do SqlConnection"
-          nullable: uuid 
+          format: uuid
         name:
           type: string
           description: "Nome do SqlConnection"
@@ -705,7 +712,7 @@ components:
         id:
           type: string
           description: "Identificador do Orquestrator"
-          nullable: uuid
+          format: uuid
         name:
           type: string
           description: "Nome do Orquestrator"
@@ -722,7 +729,7 @@ components:
         EntityId:
           type: string
           description: "Identificador da Entidade"
-          nullable: uuid
+          format: uuid
         name:
           type: string
           description: "Nome da Entidade"
@@ -733,21 +740,27 @@ components:
         name:
           type: string
           nullable: true
+          description: "Nome da Feature"
         creationUserId:
           type: string
           nullable: true
+          description: "Usuário que criou a Feature"
         caosName:
           type: string
           nullable: true
+          description: "Nome do Caos da Feature"
         tags:
           type: string
           nullable: true
+          description: "Tags da Feature"
         description:
           type: string
           nullable: true
+          description: "Descrição da Feature"
         sqlConnectionId:
           type: string
           format: uuid
+          description: "Id da conexão Sql da Feature"
         dependencies:
           type: array
           items:
@@ -757,68 +770,83 @@ components:
         sqlCode:
           type: string
           nullable: true
+          description: "Código Sql da Feature"
         schemaName:
           type: string
           nullable: true
+          description: "Schema da Feature"
         timeout:
           type: integer
           format: int32
           nullable: true
+          description: "Timeout da Feature"
         userInformation:
           $ref: >-
             #/components/schemas/Decision.Configuration.Application.Users.UserInformation
       additionalProperties: false
-    Decision.Configuration.Application.Features.Commands.Base.FeatureCommand:
+    Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand:
       type: object
       properties:
         id:
           type: string
-          nullable: uuid
+          nullable: false
           format: uuid
-        versionId:
-          type: string
-          nullable: uuid
-          format: uuid
+          description: "Id da Feature"
         key:
           type: string
-          nullable: true  
+          nullable: true
+          description: "Key da Feature"
         name:
           type: string
           nullable: true
+          description: "Nome da Feature"
         description:
           type: string
-          nullable: true  
+          nullable: true
+          description: "Descrição da Feature"
         caosName:
           type: string
           nullable: true
+          description: "Caos da Feature"
         tags:
           type: string
           nullable: true
+          description: "Tags da Feature"
         creationUserId:
           type: string
           nullable: true
+          description: "Usuário de criação da Feature"
         lastUpdateUserId:
           type: string
           nullable: true
-        createdDate:
+          description: "Último usuário a atualizar a Feature"
+        CreatedDateUtc:
           type: string
           format: date-time
-        lastUpdatedDate:
+          description: "Data de criação da Feature"
+        LastUpdatedDateUtc:
           type: string
           format: date-time
+          description: "Data da última edição da Feature"
         sqlCode:
-          type: string  
+          type: string
+          description: "Código Sql da Feature"
         sqlConnectionId:
           type: string
           format: uuid
+          description: "Código da conexão Sql da Feature"
         sqlConnectionName:
           type: string
+          description: "Nome da conexão Sql da Feature"
         deprecated:
-          type: boolean 
+          type: boolean
+          description: "Indica se a Feature está depreciada"
         status:
           type: string
+          description: "Indica se a Feature está em Rascunho ou Efetivada"
         version:
-          type: string   
+          type: string
+          description: "Versão da Feature"
         dependencies:
           type: array
           items:
@@ -828,11 +856,129 @@ components:
         schemaName:
           type: string
           nullable: true
+          description: "Schema da Feature"
         timeout:
           type: integer
           format: int32
           nullable: true
-      additionalProperties: false 
+          description: "Timeout da Feature"
+      additionalProperties: false
+    Decision.Configuration.Application.Features.Commands.Base.GetFeatureCommand:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: false
+          format: uuid
+          description: "Id da Feature"
+        versionId:
+          type: string
+          nullable: false
+          format: uuid
+          description: "Id da Versão da Feature"
+        key:
+          type: string
+          nullable: true  
+          description: "Key da Feature"
+        name:
+          type: string
+          nullable: true
+          description: "Nome da Feature"
+        description:
+          type: string
+          nullable: true  
+          description: "Descrição da Feature"
+        caosName:
+          type: string
+          nullable: true
+          description: "Caos da Feature"
+        tags:
+          type: string
+          nullable: true
+          description: "Tags da Feature"
+        creationUserId:
+          type: string
+          nullable: true
+          description: "Usuário de criação da Feature"
+        lastUpdateUserId:
+          type: string
+          nullable: true
+          description: "Último usuário a editar a Feature"
+        CreatedDateUtc:
+          type: string
+          format: date-time
+          description: "Data de criação da Feature"
+        LastUpdatedDateUtc:
+          type: string
+          format: date-time
+          description: "Data da última edição da Feature"
+        sqlCode:
+          type: string  
+          description: "Código Sql da Feature"
+        sqlConnectionId:
+          type: string
+          format: uuid
+          description: "Id da conexão Sql Feature"
+        sqlConnectionName:
+          type: string
+          description: "Nome da conexão Sql da Feature"
+        deprecated:
+          type: boolean 
+          description: "Indica que a Feature está depreciada"
+        status:
+          type: string
+          description: "Indica se a Feature está em Rascunho ou Efetivada"
+        version:
+          type: string
+          description: "Versão da Feature"
+        dependencies:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/Decision.Configuration.Application.Features.Commands.Create.GetFeatureDependencyCommand
+          nullable: true
+        schemaName:
+          type: string
+          nullable: true
+          description: "Schema da Feature"
+        timeout:
+          type: integer
+          format: int32
+          nullable: true
+          description: "Timeout da Feature"
+      additionalProperties: false  
+    Decision.Configuration.Application.Features.Commands.Create.GetFeatureDependencyCommand:
+      type: object
+      properties:
+        source:
+          $ref: >-
+            #/components/schemas/Decision.Configuration.Application.Features.GetDependencyType
+        outputId:
+          type: string
+          format: uuid
+          description: "Id da dependência"
+        alias:
+          type: string
+          nullable: true
+          description: "Alias da dependência"
+        name:
+          type: string
+          nullable: true
+          description: "Nome da dependência"
+        version:
+          type: string
+          nullable: true
+          description: "versão da dependência"
+        type: 
+          type: string
+          nullable: true
+          description: "Tipo do dado da dependência (String, Int32, Boolean, Double, DateTime)"
+      additionalProperties: false
+    Decision.Configuration.Application.Features.GetDependencyType:
+      enum: [0, 1]
+      type: integer
+      format: int32
+      description: "0 - Field | 1 - Feature"  
     Decision.Configuration.Application.Features.Commands.Create.UpdateFeatureDependencyCommand:
       type: object
       properties:
@@ -842,23 +988,13 @@ components:
         outputId:
           type: string
           format: uuid
-          description: "Id da dependência (Field ou Feature)"
+          description: "Id da dependência (no caso de Feature é o Id obtido a partir do lookup de /api/v1/Features/Version/featureVersionId/Variable/Lookup)"
         alias:
           type: string
           nullable: true
-          description: "Alias da dependência (No caso de Field é o nome)"
-        resource:
-          type: string
-          nullable: true
-          description: "Name da Feature"
-        version:
-          type: string
-          nullable: true
-          description: "versão da Feature"
-      additionalProperties: false
+          description: "Alias da dependência"
     Decision.Configuration.Application.Features.UpdateDependencyType:
       enum: [0, 1]
-      x-enumNames: [Field, Feature]
       type: integer
       format: int32
       description: "0 - Field | 1 - Feature"
@@ -871,21 +1007,11 @@ components:
         outputId:
           type: string
           format: uuid
+          description: "Id da dependência (no caso de Feature é o Id obtido a partir do lookup de /api/v1/Features/Version/featureVersionId/Variable/Lookup)"
         alias:
           type: string
           nullable: true
-        resource:
-          type: string
-          nullable: true
-        version:
-          type: string
-          nullable: true
-        output:
-          type: string
-          nullable: true
-        type:
-          type: string
-          nullable: true
+          description: "Alias da dependência"
       additionalProperties: false
     Decision.Configuration.Application.Features.DependencyType:
       enum:
@@ -1007,7 +1133,6 @@ components:
         instance:
           type: string
           nullable: true
-      additionalProperties: {}
   securitySchemes:
     Bearer:
       type: http
