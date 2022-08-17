@@ -129,7 +129,26 @@ paths:
         '201':
           description: Retorna o novo item criado
         '400':
-          description: Se o item não for criado
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Http400
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
+        '500':
+          description: Internal Server Error  
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
   /api/v1/Features/featureId:
     get:
       summary: Recupera os dados de uma feature. (Em desenvolvimento)
@@ -156,9 +175,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Http400
+        '422':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
         '500':
-          description: Server Error
+          description: Se o item não for criado  
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
     put:
       tags:
         - Features
@@ -178,21 +210,40 @@ paths:
             schema:
               $ref: >-
                 #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
-          text/json:
-            schema:
-              $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
+            text/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Base.UpdateFeatureCommand    
       responses:
         '200':
           description: Success
         '201':
           description: Retorna o novo item criado
         '400':
-          description: Se o item não for criado          
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.Http400
+        '422':
+          description: Unprocessable Entity 
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
   /api/v1/Features/featureId/Preview:
     get:
       summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
@@ -734,6 +785,55 @@ components:
           type: string
           description: "Nome da Entidade"
           nullable: true
+    Decision.Configuration.Application.Features.Commands.HttpErrorDefault:
+      type: object
+      properties:
+          statusCode:
+            type: string
+            nullable: true
+            description: "Http Code referente ao erro"
+          Message:
+            type: string
+            nullable: true
+            description: "Mensagem referente aos erros"
+          Errors:
+            type: string
+            nullable: true
+            description: "Indica os erros"
+    Decision.Configuration.Application.Features.Commands.Http400:
+      type: object
+      properties:
+          type:
+            type: string
+            nullable: true
+            description: "Tipo do erro"
+          title:
+            type: string
+            nullable: true
+            description: "Título do erro"
+          status:
+            type: string
+            nullable: true
+            description: "Código Http do Erro"
+          traceId:
+            type: string
+            nullable: true
+            description: "TraceId do erro" 
+          errors:
+            type: array
+            nullable: true
+            type: array
+            items:
+              $ref: >-
+                #/components/schemas/Decision.Configuration.Application.Features.Commands.ErrosArray
+            description: "Array com a descrição dos erros"    
+    Decision.Configuration.Application.Features.Commands.ErrosArray:
+      type: object
+      properties:
+        Description:
+          type: string
+          nullable: true
+          description: "Descrição do Erro"            
     Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand:
       type: object
       properties:
