@@ -46,7 +46,7 @@ paths:
       summary: Recupera todas as Feature utilizando Paginação e/ou filtros. (Em desenvolvimento)
       description: "Utilizar na listagem de Features"
       tags:
-        - CustomerEntities
+        - Features
       parameters:
         - name: PageNumber
           description: "Número da página desejada"
@@ -249,7 +249,7 @@ paths:
       summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
       description: "Retorna as informações simplificadas (Sempre será utilizada a última versão) para visualização na listagem quando a Feature é selecionada."
       tags:
-        - CustomerEntities
+        - Features
       parameters:
         - name: featureId
           in: path
@@ -278,7 +278,7 @@ paths:
       summary: Recupera a listagem de Features sem Paginação e filtros (Em desenvolvimento)
       description: "Utilizar na listagem de combos/lookups"
       tags:
-        - CustomerEntities
+        - Features
       responses:
         '200':
           description: Success
@@ -338,7 +338,7 @@ paths:
             type: string
             format: uuid               
       tags:
-        - CustomerEntities
+        - Features
       responses:
         '200':
           description: Success
@@ -397,7 +397,7 @@ paths:
       summary: Recupera a listagem de Fields sem Paginação e filtros (Em desenvolvimento)
       description: "Utilizar na listagem de combos/lookups"
       tags:
-        - CustomerEntities
+        - Fields
       responses:
         '200':
           description: Success
@@ -957,6 +957,9 @@ components:
           type: string
           nullable: true
           description: "Schema da Feature"
+        userInformation:
+          $ref: >-
+            #/components/schemas/Decision.Configuration.Application.Users.UserInformation
         timeout:
           type: integer
           format: int32
