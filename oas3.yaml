@@ -414,7 +414,7 @@ paths:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '500':
           description: Server Error
-  /api/v1/SqlConnection/Lookup:   
+  /api/v1/SqlConnections/Lookup:   
     get:
       summary: Recupera a listagem de Sql Connection sem Paginação e filtros (Em desenvolvimento)
       description: "Utilizar na listagem de combos/lookups"
