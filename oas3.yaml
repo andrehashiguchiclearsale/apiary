@@ -201,7 +201,7 @@ paths:
           schema:
             type: string
             format: uuid        
-      summary: Atualiza uma Feature. (Aguardando desenvolvimento)
+      summary: Atualiza uma Feature. (Em desenvolvimento)
       description: "Atualiza uma Feature."
       requestBody:
         description: ''
@@ -246,7 +246,7 @@ paths:
                   #/components/schemas/Decision.Configuration.Application.Features.Commands.HttpErrorDefault
   /api/v1/Features/featureId/Preview:
     get:
-      summary: Recupera a Pré-Visualização da feature. (Em desenvolvimento)
+      summary: Recupera a Pré-Visualização da feature.
       description: "Retorna as informações simplificadas (Sempre será utilizada a última versão) para visualização na listagem quando a Feature é selecionada."
       tags:
         - Features
@@ -275,7 +275,7 @@ paths:
           description: Server Error  
   /api/v1/Features/Lookup:   
     get:
-      summary: Recupera a listagem de Features sem Paginação e filtros (Em desenvolvimento)
+      summary: Recupera a listagem de Features sem Paginação e filtros
       description: "Utilizar na listagem de combos/lookups"
       tags:
         - Features
@@ -297,7 +297,7 @@ paths:
           description: Server Error    
   /api/v1/Features/featureId/Version/Lookup:   
     get:
-      summary: Recupera a listagem de Versões da Feature sem Paginação e filtros (Em desenvolvimento)
+      summary: Recupera a listagem de Versões da Feature sem Paginação e filtros
       description: "Utilizar na listagem de combos/lookups"
       parameters:
         - name: featureId
@@ -327,7 +327,7 @@ paths:
           description: Server Error
   /api/v1/Features/Version/featureVersionId/Variable/Lookup:   
     get:
-      summary: Recupera a listagem de Versões da Feature sem Paginação e filtros (Em desenvolvimento)
+      summary: Recupera a listagem de Versões da Feature sem Paginação e filtros
       description: "Utilizar na listagem de combos/lookups"
       parameters:
         - name: featureVersionId
@@ -416,7 +416,7 @@ paths:
           description: Server Error
   /api/v1/SqlConnections/Lookup:   
     get:
-      summary: Recupera a listagem de Sql Connection sem Paginação e filtros (Em desenvolvimento)
+      summary: Recupera a listagem de Sql Connection sem Paginação e filtros
       description: "Utilizar na listagem de combos/lookups"
       tags:
         - CustomerEntities
