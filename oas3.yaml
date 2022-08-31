@@ -1076,6 +1076,18 @@ components:
           type: string
           nullable: true
           description: "Tipo do dado da dependência (String, Int32, Boolean, Double, DateTime)"
+        description: 
+          type: string
+          nullable: true
+          description: "Descrição da Dependência"
+        tags: 
+          type: string
+          nullable: true
+          description: "Tags da Dependência (somente Feature)"
+        variable: 
+          type: string
+          nullable: true
+          description: "Variavel da Dependência (somente Feature)"    
       additionalProperties: false
     Decision.Configuration.Application.Features.GetDependencyType:
       enum: [0, 1]
