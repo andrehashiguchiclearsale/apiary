@@ -566,9 +566,10 @@ components:
         id:
           type: integer
           format: int32
+          nullable: false
         name:
           type: string
-          nullable: true
+          nullable: false
       additionalProperties: false
     Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse:
       type: object
