@@ -1,0 +1,1672 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Decision API",
+    "description": "API of decision.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://10.130.18.249/decisionconfiguration-api"
+    }
+  ],
+  "paths": {
+    "/BatchTests/Start": {
+      "post": {
+        "tags": [
+          "BatchTests"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/BatchTests/Finish": {
+      "post": {
+        "tags": [
+          "BatchTests"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/CustomerEntities": {
+      "post": {
+        "tags": [
+          "CustomerEntities"
+        ],
+        "summary": "Cria uma Entidade.",
+        "description": "Exemplo:\r\n            \r\n    POST /api/v1/CustomerEntities\r\n    {\r\n       \"id\": 1,\r\n       \"name\": \"Item1\"\r\n    }",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Retorna o novo item criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Se a entidade não foi criado por erro no servidor"
+          },
+          "400": {
+            "description": "Se a entidade não foi criada por dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "CustomerEntities"
+        ],
+        "parameters": [
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "InitialDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "FinalDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "SortAsc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortDesc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse]]"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Deployments/{environmentExecutionId}/{deploymentId}/Deploy": {
+      "post": {
+        "tags": [
+          "Deployments"
+        ],
+        "parameters": [
+          {
+            "name": "environmentExecutionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "deploymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Features": {
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Cria uma Feature.",
+        "description": "Exemplo:\r\n            \r\n    POST \r\n    {\r\n        \"name\": \"feature1\",\r\n        \"caosName\": \"caos\",\r\n        \"tags\": \"tag1\",\r\n        \"description\": \"descrição 123\",\r\n        \"sqlConnectionId\": \"42674338-5DED-424A-B60C-60DB9715C2D7\",\r\n        \"dependencies\": [\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"0E78C654-2DCB-4528-B9FC-C2DBB85A2202\",\r\n           \"Alias\": \"variavel1\",\r\n           \"Output\": \"var2\",\r\n           \"Resource\": \"variavel1\",\r\n           \"Version\": \"0.0.2\",\r\n           \"Type\": \"integer\"\r\n         },\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"C04E5FD2-03D7-4E42-A6FB-E9CC63C31BC1\",\r\n           \"Alias\": \"variavel2\",\r\n           \"Output\": \"var2\",\r\n           \"Resource\": \"testvar1\",\r\n           \"Version\": \"0.0.8\",\r\n           \"Type\": \"integer\"\r\n         },\r\n         {\r\n            \"Source\": 0,\r\n               \"OutputId\": \"824F279C-3DA5-4FC8-95C6-B20C4C6092DA\",\r\n               \"Alias\": \"pedido_telefone_nro\",\r\n               \"Resource\": \"pedido_telefone_nro\",\r\n               \"Type\": \"integer\"\r\n           },\r\n           {\r\n               \"Source\": 0,\r\n               \"OutputId\": \"13A857F8-5934-4C20-AE67-C30158CA992E\",\r\n               \"Alias\": \"uf\",\r\n               \"Resource\": \"uf\",\r\n               \"Type\": \"integer\"\r\n           }\r\n        ],\r\n       \"sqlCode\": \"declare @var1 int   select @var1, @variavel1, @variavel2, @uf, @pedido_telefone_nro\",\r\n        \"schemaName\": \"dbo\",\r\n        \"timeout\": 30,\r\n        \"userInformation\": {\r\n            \"id\": \"user.id\",\r\n            \"email\": \"userid@userid.com\"\r\n        }\r\n    }",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "201": {
+            "description": "Retorna o novo item criado"
+          },
+          "400": {
+            "description": "Se o item não for criado"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "parameters": [
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "InitialDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "FinalDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "SortAsc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortDesc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse]]"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Features/{featureId}/Preview": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Retorna os dados resumidos de Feature",
+        "parameters": [
+          {
+            "name": "featureId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Retorna os dados resumidos de Feature"
+          },
+          "404": {
+            "description": "Se o item não for localizado"
+          }
+        }
+      }
+    },
+    "/api/v1/Features/Lookup": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Utilizar na listagem de combos/lookups de feature",
+        "responses": {
+          "200": {
+            "description": "Retorna os dados resumidos de Feature",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Features/{featureId}/Version/Lookup": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Utilizar na listagem de combos/lookups de feature version",
+        "parameters": [
+          {
+            "name": "featureId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna os dados referente a versão de Features resumidos.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Features/Version/{featureVersionId}/Variable/Lookup": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Utilizar na listagem de combos/lookups de feature variable",
+        "parameters": [
+          {
+            "name": "featureVersionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna os dados referentes as variavéis de uma versão de feature",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Features/{featureId}": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Retorna os dados completos de Feature",
+        "parameters": [
+          {
+            "name": "featureId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Retorna os dados completos de Feature"
+          },
+          "404": {
+            "description": "Se o item não for localizado"
+          }
+        }
+      }
+    },
+    "/api/v1/Fields/{id}": {
+      "patch": {
+        "tags": [
+          "Fields"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Fields/lookup": {
+      "get": {
+        "tags": [
+          "Fields"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Decision.Configuration.Application.Fields.Queries.GetFieldsLookupQueryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/SqlConnections/Lookup": {
+      "get": {
+        "tags": [
+          "SqlConnections"
+        ],
+        "summary": "Utilizar na listagem de combos/lookups de sqlConnection",
+        "responses": {
+          "200": {
+            "description": "Retorna os dados de sqlConnection",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/StatisticalModels": {
+      "post": {
+        "tags": [
+          "StatisticalModels"
+        ],
+        "summary": "Cria um Modelo.",
+        "description": "Exemplo:\r\n            \r\n    POST /api/v1/StatisticalModels\r\n    {\r\n        \"name\":\"nomemodelo\",\r\n        \"tags\":\"nomedatag\",\r\n        \"description\": \"descriptionModel\",\r\n        \"dependencies\":[\r\n        {\r\n            \"source\":1,\r\n            \"outputId\":\"BAE76C28-C808-4F5A-B2B9-7202A3713EDE\",\r\n            \"alias\":\"aliasdependencia\"\r\n        }\r\n        ],\r\n        \"endpoint\":\"urlendpoint1\",\r\n        \"secondaryEndpoint\":\"urlendpoint2\",\r\n        \"primaryAuthenticationKey\":\"primaryAuthenticationKey\",\r\n        \"secondaryAuthenticationKey\":\"secondaryAuthenticationKey\",\r\n        \"UserId\":\"user.id\"\r\n    }",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "201": {
+            "description": "Retorna o novo item criado"
+          },
+          "400": {
+            "description": "Se o item não for criado"
+          }
+        }
+      }
+    },
+    "/Tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Tests/{testId}/Results/File": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Tests/Execution-Environments": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/TransactionData/{analysisId}": {
+      "get": {
+        "tags": [
+          "UnitTests"
+        ],
+        "parameters": [
+          {
+            "name": "analysisId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "entityId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "executionEnvironmentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/UnitTests/Run": {
+      "post": {
+        "tags": [
+          "UnitTests"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "length": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest": {
+        "required": [
+          "data",
+          "executionEnvironment",
+          "fieldMappingVersionId",
+          "subjectType",
+          "subjectVersionId"
+        ],
+        "type": "object",
+        "properties": {
+          "subjectVersionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectType": {
+            "$ref": "#/components/schemas/Decision.Configuration.Domain.Tests.SubjectType"
+          },
+          "data": { },
+          "fieldMappingVersionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "executionEnvironment": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest": {
+        "type": "object",
+        "properties": {
+          "subjectType": {
+            "$ref": "#/components/schemas/Decision.Configuration.Domain.Tests.SubjectType"
+          },
+          "subjectVersionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fieldMappingVersionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "batchSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "executionEnvironment": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse]]": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse]]": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "creationUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "caosName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand"
+            },
+            "nullable": true
+          },
+          "sqlCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userInformation": {
+            "$ref": "#/components/schemas/Decision.Configuration.Application.Users.UserInformation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/Decision.Configuration.Application.Features.DependencyType"
+          },
+          "outputId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "alias": {
+            "type": "string",
+            "nullable": true
+          },
+          "resource": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "output": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.DependencyType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnection": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastUpdateUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastUpdatedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetbyId.DependenciesResponse": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "outputId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "alias": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "versionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "caosName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "creationUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastUpdateUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdatedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sqlCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sqlConnectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Decision.Configuration.Application.Features.Queries.GetbyId.DependenciesResponse"
+            },
+            "nullable": true
+          },
+          "schemaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastUpdateUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastUpdatedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sqlConnection": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Fields.Queries.GetFieldsLookupQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelDependencyCommand"
+            },
+            "nullable": true
+          },
+          "endpoint": {
+            "type": "string",
+            "nullable": true
+          },
+          "secondaryendpoint": {
+            "type": "string",
+            "nullable": true
+          },
+          "primaryauthenticationkey": {
+            "type": "string",
+            "nullable": true
+          },
+          "secondaryauthenticationkey": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelDependencyCommand": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/Decision.Configuration.Application.StatisticalModels.DependencyType"
+          },
+          "outputId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "alias": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Application.StatisticalModels.DependencyType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Decision.Configuration.Application.Users.UserInformation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision.Configuration.Domain.Tests.SubjectType": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Microsoft.AspNetCore.Mvc.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization, example: '12345abcdef'",
+        "scheme": "Bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
