@@ -696,30 +696,40 @@ definitions:
           description: "Descrição do Erro"        
   Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest:
     type: object
+    required:
+      - testId
     properties:
       testId:
         format: uuid
         type: string
   Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest:
     type: object
+    required:
+      - subjectType
+      - subjectVersionId
+      - entityId
+      - batchSize
+      - executionEnvironment
     properties:
       subjectType:
         $ref: '#/definitions/Decision.Configuration.Domain.Tests.SubjectType'
+        description: "Tipo do item que será testado"
       subjectVersionId:
         format: uuid
         type: string
-      fieldMappingVersionId:
-        format: uuid
-        type: string
+        description: "Id do item que será testada"
       entityId:
         format: int32
         type: integer
+        description: "Id da entidade que será testada"
       batchSize:
         format: int32
         type: integer
+        description: "Quantidade de testes"
       executionEnvironment:
         format: int32
         type: integer
+        description: "Ambiente que será executado os testes"
   'Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse]]':
     type: object
     properties:
@@ -1190,6 +1200,7 @@ definitions:
       - 3
       - 4
       - 5
+    description: "1 - Feature | 2 - StatisticalModel | 3 - Rule | 4 - DecisionFlow | 5 - Orchestrator"  
     type: integer
   Microsoft.AspNetCore.Mvc.ProblemDetails:
     type: object
