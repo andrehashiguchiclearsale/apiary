@@ -477,6 +477,40 @@ paths:
           description: Internal Server Error  
           schema:
             $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+  /api/v1/Orchestrator/{featureVersionId}/Entities:
+    get:
+      tags:
+        - Orchestrator
+      summary: Recupera a listagem de Orquestratores com suas entidades vinculadas filtradas por uma Feature (Em desenvolvimento).
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - in: path
+          name: featureVersionId
+          description: "Identificador da Versão da Feature"
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Retorna os dados de Entidades vinculadas ao Orquestrator
+          schema:
+            $ref: >-
+              #/definitions/Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+        '500':
+          description: Internal Server Error  
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'          
   /api/v1/StatisticalModels:
     post:
       tags:
@@ -1053,6 +1087,31 @@ definitions:
       description:
         type: string
         description: "Descrição do Field"          
+  Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities:    
+     type: object
+     properties:
+        id:
+          type: string
+          description: "Identificador do Orquestrator | Obrigatório"
+          format: uuid
+        name:
+          type: string
+          description: "Nome do Orquestrator | Obrigatório"
+        Entities:
+          type: array
+          items:
+            $ref: >-
+              #/definitions/Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities
+  Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities: 
+      type: object
+      properties:
+        EntityId:
+          type: string
+          description: "Identificador da Entidade"
+          format: uuid
+        name:
+          type: string
+          description: "Nome da Entidade"
   Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand:
     type: object
     required:
