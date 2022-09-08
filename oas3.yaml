@@ -477,10 +477,10 @@ paths:
           description: Internal Server Error  
           schema:
             $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  /api/v1/Orchestrator/{featureVersionId}/Entities:
+  /api/v1/Features/Orchestrator/{featureId}/Entities:
     get:
       tags:
-        - Orchestrator
+        - Features
       summary: Recupera a listagem de Orquestratores com suas entidades vinculadas filtradas por uma Feature (Em desenvolvimento).
       produces:
         - text/plain
@@ -488,7 +488,7 @@ paths:
         - text/json
       parameters:
         - in: path
-          name: featureVersionId
+          name: featureId
           description: "Identificador da Versão da Feature"
           required: true
           type: string
