@@ -623,7 +623,7 @@ definitions:
     required:
       - data
       - executionEnvironment
-      - fieldMappingVersionId
+      - entityId
       - subjectType
       - subjectVersionId
     type: object
@@ -634,12 +634,13 @@ definitions:
       subjectType:
         $ref: '#/definitions/Decision.Configuration.Domain.Tests.SubjectType'
       data: {}
-      fieldMappingVersionId:
-        format: uuid
-        type: string
       executionEnvironment:
         format: int32
         type: integer
+      entityId:
+        format: int32
+        type: integer
+        description: "Id da entidade que será testada (Utilizado para buscar a última versão do mapeamento de campos)"  
   Decision.Configuration.Application.Features.Commands.UpdateChain: 
       type: object
       properties:
