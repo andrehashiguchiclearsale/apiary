@@ -177,6 +177,54 @@ paths:
           description: Internal Server Error  
           schema:
             $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+    get:
+      tags:
+        - Features
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: PageNumber
+          type: integer
+          format: int32
+        - in: query
+          name: PageSize
+          type: integer
+          format: int32
+        - in: query
+          name: Search
+          type: string
+        - in: query
+          name: InitialDate
+          type: string
+          format: date-time
+        - in: query
+          name: FinalDate
+          type: string
+          format: date-time
+        - in: query
+          name: SortAsc
+          type: string
+        - in: query
+          name: SortDesc
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Commons.Pagination.PagedResponse.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+        '500':
+          description: Internal Server Error  
+          schema:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'       
   /api/v1/Features/{featureId}:
     get:
       tags:
@@ -1065,6 +1113,42 @@ definitions:
       version:
         type: string
         description: "Versão da Feature | Obrigatório"
+  Decision.Configuration.Application.Commons.Pagination.PagedResponse.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse:
+    type: object
+    properties:
+      pageNumber:
+        format: int32
+        type: integer
+      pageSize:
+        format: int32
+        type: integer
+      totalPages:
+        format: int32
+        type: integer
+      totalRecords:
+        format: int32
+        type: integer
+      data:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse'      
+  Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse:
+    type: object
+    properties:
+      id:
+        format: uuid
+        type: string
+      name:
+        type: string
+      sqlConnection:
+        type: string
+      lastUpdateUserId:
+        type: string
+      lastUpdatedDateUtc:
+        format: date-time
+        type: string          
   Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse:
     type: object
     properties:
