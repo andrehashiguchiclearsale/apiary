@@ -831,6 +831,7 @@ definitions:
       - dependencies
       - sqlCode
       - userInformation
+      - schemaName
     properties:
       name:
         type: string
@@ -862,7 +863,7 @@ definitions:
         description: "Código Sql da Feature | Obrigatório"
       schemaName:
         type: string
-        description: "Schema da Feature"
+        description: "Schema da Feature | Obrigatório"
       timeout:
         format: int32
         type: integer
