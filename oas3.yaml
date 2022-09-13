@@ -1005,6 +1005,7 @@ definitions:
       - dependencies
       - sqlCode
       - userInformation
+      - schemaName
     properties:
       id:
         format: uuid
@@ -1035,7 +1036,7 @@ definitions:
         description: "Id da conexão Sql da Feature | Obrigatório"
       schemaName:
         type: string
-        description: "Schema da Feature"
+        description: "Schema da Feature | Obrigatório"
       description:
         type: string
         description: "Descrição da Feature | Obrigatório"
