@@ -1018,7 +1018,7 @@ definitions:
         description: "Nome da Feature | Obrigatório"
       tags:
         type: string
-        description: "Tags da Feature | Obrigatório"
+        description: "Tags da Feature"
       caosName:
         type: string
         description: "Caos da Feature"
