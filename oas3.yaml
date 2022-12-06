@@ -1,1306 +1,749 @@
 swagger: '2.0'
+
 info:
-  title: Decision API
-  description: API of decision.
-  version: v1
-host: 'localhost:5001'
-basePath: /
-schemes:
-  - https
+    version: v1
+    title: Instant decision API
+    description: API de decisão instantânea
+
 paths:
-  /BatchTests/Start:
-    post:
-      tags:
-        - BatchTests
-      consumes:
-        - application/json
-        - text/json
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest
-      responses:
-        '200':
-          description: Success
-  /BatchTests/Finish:
-    post:
-      tags:
-        - BatchTests
-      consumes:
-        - application/json
-        - text/json
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest
-      responses:
-        '200':
-          description: Success
-  /api/v1/CustomerEntities:
-    post:
-      tags:
-        - CustomerEntities
-      summary: Cria uma Entidade.
-      description: "Exemplo:\r\n            \r\n    POST /api/v1/CustomerEntities\r\n    {\r\n       \"id\": 1,\r\n       \"name\": \"Item1\"\r\n    }"
-      consumes:
-        - application/json
-        - text/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: ''
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand
-      responses:
-        '201':
-          description: Retorna o novo item criado
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+  /Rules:
     get:
       tags:
-        - CustomerEntities
-      summary: Paginação de Entidades.  
+        - Rules
+      summary: Listagem de regras
       produces:
         - application/json
       parameters:
-        - in: query
-          name: PageNumber
-          type: integer
-          format: int32
-        - in: query
-          name: PageSize
-          type: integer
-          format: int32
-        - in: query
-          name: Search
-          type: string
-        - in: query
-          name: InitialDate
-          type: string
-          format: date-time
-        - in: query
-          name: FinalDate
-          type: string
-          format: date-time
-        - in: query
-          name: SortAsc
-          type: string
-        - in: query
-          name: SortDesc
-          type: string
-      responses:
-        '200':
-          description: Success
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse]]
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  '/Deployments/{environmentExecutionId}/{deploymentId}/Deploy':
-    post:
-      tags:
-        - Deployments
-      parameters:
-        - in: path
-          name: environmentExecutionId
+        - name: pageNumber
+          description: Número da página
+          in: query
           required: true
           type: integer
-          format: int32
-        - in: path
-          name: deploymentId
+        - name: pageSize
+          description: Quantidade de registros na página
+          in: query
           required: true
+          type: integer
+        - name: search
+          description: Conteúdo da busca
+          in: query
+          required: false
           type: string
-          format: uuid
+        - name: initialDate
+          description: Data inicial do range de data (format= dateTime)
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: finalDate
+          description: Data final do range de data (format= dateTime)
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: sortAsc
+          description: Ordenação ascendente
+          in: query
+          required: false
+          type: string
+          enum:
+              - name
+              - lastEdition
+              - version
+              - statusCode
+              - editor
+        - name: sortDesc
+          description: Ordenação descendente
+          in: query
+          required: false
+          type: string
+          enum:
+              - name
+              - lastEdition
+              - version
+              - statusCode
+              - editor
       responses:
-        '200':
-          description: Success
-  /api/v1/Features:
+          '200':
+              description: Lista com as regras correspondentes aos filtros
+              schema:
+                $ref: '#/definitions/Rules.ListResponse'
     post:
       tags:
-        - Features
-      summary: Cria uma Feature.
-      description: "Exemplo:\r\n            \r\n    POST \r\n    {\r\n        \"name\": \"feature1\",\r\n        \"caosName\": \"caos\",\r\n        \"tags\": \"tag1\",\r\n        \"description\": \"descrição 123\",\r\n        \"sqlConnectionId\": \"42674338-5DED-424A-B60C-60DB9715C2D7\",\r\n        \"dependencies\": [\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"0E78C654-2DCB-4528-B9FC-C2DBB85A2202\",\r\n           \"Alias\": \"variavel1\",\r\n           \"Output\": \"var2\",\r\n           \"Resource\": \"variavel1\",\r\n           \"Version\": \"0.0.2\",\r\n           \"Type\": \"integer\"\r\n         },\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"C04E5FD2-03D7-4E42-A6FB-E9CC63C31BC1\",\r\n           \"Alias\": \"variavel2\",\r\n           \"Output\": \"var2\",\r\n           \"Resource\": \"testvar1\",\r\n           \"Version\": \"0.0.8\",\r\n           \"Type\": \"integer\"\r\n         },\r\n         {\r\n            \"Source\": 0,\r\n               \"OutputId\": \"824F279C-3DA5-4FC8-95C6-B20C4C6092DA\",\r\n               \"Alias\": \"pedido_telefone_nro\",\r\n               \"Resource\": \"pedido_telefone_nro\",\r\n               \"Type\": \"integer\"\r\n           },\r\n           {\r\n               \"Source\": 0,\r\n               \"OutputId\": \"13A857F8-5934-4C20-AE67-C30158CA992E\",\r\n               \"Alias\": \"uf\",\r\n               \"Resource\": \"uf\",\r\n               \"Type\": \"integer\"\r\n           }\r\n        ],\r\n       \"sqlCode\": \"declare @var1 int   select @var1, @variavel1, @variavel2, @uf, @pedido_telefone_nro\",\r\n        \"schemaName\": \"dbo\",\r\n        \"timeout\": 30,\r\n        \"userInformation\": {\r\n            \"id\": \"user.id\",\r\n            \"email\": \"userid@userid.com\"\r\n        }\r\n    }"
+        - Rules
+      summary: Inclusão de regras
       consumes:
         - application/json
-        - text/json
-      parameters:
-        - in: body
-          name: body
-          description: ''
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand
-      responses:
-        '200':
-          description: Success
-        '201':
-          description: Retorna o novo item criado
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-    get:
-      tags:
-        - Features
       produces:
         - application/json
       parameters:
-        - in: query
-          name: PageNumber
-          type: integer
-          format: int32
-        - in: query
-          name: PageSize
-          type: integer
-          format: int32
-        - in: query
-          name: Search
-          type: string
-        - in: query
-          name: InitialDate
-          type: string
-          format: date-time
-        - in: query
-          name: FinalDate
-          type: string
-          format: date-time
-        - in: query
-          name: SortAsc
-          type: string
-        - in: query
-          name: SortDesc
-          type: string
-      responses:
-        '200':
-          description: Success
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Commons.Pagination.PagedResponse.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse'
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'       
-  /api/v1/Features/{featureId}:
-    get:
-      tags:
-        - Features
-      summary: Retorna os dados completos de Feature
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters:
-        - in: path
-          name: featureId
-          description: ''
+        - name: body
+          description: Regra a ser criada
+          in: body
           required: true
-          type: string
-          format: uuid
+          schema:
+              $ref: '#/definitions/Rules.PostBody'
       responses:
         '200':
-          description: Retorna os dados completos de Feature
+          description: 'Rule criada'
           schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse'
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
+            $ref: '#/definitions/Rules.PostResponse'
     put:
       tags:
-        - Features
-      summary: Atualiza uma Feature.
-      description: "Exemplo:\r\n            \r\n    PUT \r\n    {\r\n        \"id\":\"42674338-5DED-424A-B60C-60DB9715C2D8\" \r\n        \"name\": \"feature1\",\r\n        \"caosName\": \"caos\",\r\n        \"tags\": \"tag1\",\r\n        \"description\": \"descrição 123\",\r\n        \"sqlConnectionId\": \"42674338-5DED-424A-B60C-60DB9715C2D7\",\r\n        \"dependencies\": [\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"0E78C654-2DCB-4528-B9FC-C2DBB85A2202\",\r\n           \"Alias\": \"variavel1\"\r\n         },\r\n         {\r\n           \"Source\": 1,\r\n           \"OutputId\": \"C04E5FD2-03D7-4E42-A6FB-E9CC63C31BC1\",\r\n           \"Alias\": \"variavel2\"\r\n         },\r\n         {\r\n            \"Source\": 0,\r\n               \"OutputId\": \"824F279C-3DA5-4FC8-95C6-B20C4C6092DA\",\r\n               \"Alias\": \"pedido_telefone_nro\",\r\n               \"Resource\": \"pedido_telefone_nro\"\r\n           },\r\n           {\r\n               \"Source\": 0,\r\n               \"OutputId\": \"13A857F8-5934-4C20-AE67-C30158CA992E\",\r\n               \"Alias\": \"uf\"\r\n           }\r\n        ],\r\n       \"sqlCode\": \"declare @var1 int   select @var1, @variavel1, @variavel2, @uf, @pedido_telefone_nro\",\r\n        \"schemaName\": \"dbo\",\r\n        \"timeout\": 30,\r\n        \"userInformation\": {\r\n            \"id\": \"user.id\",\r\n            \"email\": \"userid@userid.com\"\r\n        }\r\n    }"
+        - Rules
+      summary: Alteração de regras
       consumes:
         - application/json
-        - text/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: Regra a ser alterada
+          in: body
+          required: true
+          schema:
+              $ref: '#/definitions/Rules.PutBody'
+      responses:
+        '200':
+          description: 'Rule alterada'
+          schema:
+            $ref: '#/definitions/Rules.PostResponse'
+  /Rules/{ruleId}:
+    get:
+      tags:
+        - Rules
+      summary: Detalhes de uma determinada regra
       produces:
         - application/json
       parameters:
         - in: path
-          name: featureId
-          description: ''
+          name: ruleId
+          description: Identificador da regra (format= Guid)
           required: true
           type: string
-          format: uuid
-        - in: body
-          name: body
-          description: ''
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Update.UpdateFeatureCommand'
+          format: Guid
       responses:
-        '200':
-          description: Retorna a Feature atualizada
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse'
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'       
-  '/api/v1/Features/{featureId}/Preview':
+          '200':
+            description: 'Detalhes de uma determinada regra'
+            schema:
+              $ref: '#/definitions/Rules.DetailResponse'
+  /Rules/{ruleVersionId}/Preview:
     get:
       tags:
-        - Features
-      summary: Retorna os dados resumidos de Feature
+        - Rules
+      summary: Preview de uma determinada regra
       produces:
-        - text/plain
         - application/json
       parameters:
         - in: path
-          name: featureId
-          description: ''
+          name: ruleVersionId
+          description: Identificador da versão da regra (format= Guid)
           required: true
           type: string
-          format: uuid
+          format: Guid
       responses:
-        '200':
-          description: Retorna os dados resumidos de Feature
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  /api/v1/Features/Lookup:
+          '200':
+            description: Preview de uma determinada versão de regra
+            schema:
+                $ref: '#/definitions/Rules.PreviewResponse'
+  /Rules/{ruleId}/Version:
     get:
       tags:
-        - Features
-      summary: Utilizar na listagem de combos/lookups de feature
+        - Rules
+      summary: Versões de uma determinada regra
       produces:
-        - text/plain
-        - application/json
-        - text/json
-      responses:
-        '200':
-          description: Retorna os dados resumidos de Feature
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  '/api/v1/Features/{featureId}/Version/Lookup':
-    get:
-      tags:
-        - Features
-      summary: Utilizar na listagem de combos/lookups de feature version
-      produces:
-        - text/plain
         - application/json
       parameters:
-        - in: path
-          name: featureId
+        - name: ruleId
+          in: path
+          description: Identificador da regra (format= Guid)
           required: true
           type: string
-          format: uuid
-      responses:
-        '200':
-          description: Retorna os dados referente a versão de Features resumidos.
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  '/api/v1/Features/Version/{featureVersionId}/Variable/Lookup':
-    get:
-      tags:
-        - Features
-      summary: Utilizar na listagem de combos/lookups de feature variable
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters:
-        - in: path
-          name: featureVersionId
+          format: Guid
+        - name: pageNumber
+          description: Número da página
+          in: query
           required: true
-          type: string
-          format: uuid
-      responses:
-        '200':
-          description: Retorna os dados referentes as variavéis de uma versão de feature
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  '/api/v1/Features/UpdateChain':   
-    post:
-      tags:
-        - Features
-      summary: Realiza a atualização em cascata da Feature (Em desenvolvimento)
-      description: "Utilizar para atualizar os orquestratores que a Feature é utilizada"
-      parameters:
-        - in: body
-          name: body
-          description: ''
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Features.Commands.UpdateChain
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault' 
-  /api/v1/Fields/Lookup:
-    get:
-      tags:
-        - Fields
-      summary: Recupera a listagem de Fields sem Paginação e filtros (Em desenvolvimento)
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      responses:
-        '200':
-          description: Utilizar na listagem de combos/lookups
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Fields.Queries.GetFieldsLookup.FieldsLookupResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'          
-  '/Fields/{id}':
-    patch:
-      tags:
-        - Fields
-      consumes:
-        - application/json
-        - text/json
-      parameters:
-        - in: path
-          name: id
-          required: true
-          type: string
-          format: uuid
-        - in: body
-          name: body
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest
-      responses:
-        '200':
-          description: Success
-  /api/v1/SqlConnections/Lookup:
-    get:
-      tags:
-        - SqlConnections
-      summary: Utilizar na listagem de combos/lookups de sqlConnection
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      responses:
-        '200':
-          description: Retorna os dados de sqlConnection
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  /api/v1/Features/Orchestrator/{featureId}/Entities:
-    get:
-      tags:
-        - Features
-      summary: Recupera a listagem de Orquestratores com suas entidades vinculadas filtradas por uma Feature (Em desenvolvimento).
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters:
-        - in: path
-          name: featureId
-          description: "Identificador da Versão da Feature"
-          required: true
-          type: string
-          format: uuid
-      responses:
-        '200':
-          description: Retorna os dados de Entidades vinculadas ao Orquestrator
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'          
-  /api/v1/StatisticalModels:
-    post:
-      tags:
-        - StatisticalModels
-      summary: Cria um Modelo.
-      description: "Exemplo:\r\n            \r\n    POST /api/v1/StatisticalModels\r\n    {\r\n        \"name\":\"nomemodelo\",\r\n        \"tags\":\"nomedatag\",\r\n        \"description\": \"descriptionModel\",\r\n        \"dependencies\":[\r\n        {\r\n            \"source\":1,\r\n            \"outputId\":\"BAE76C28-C808-4F5A-B2B9-7202A3713EDE\",\r\n            \"alias\":\"aliasdependencia\"\r\n        }\r\n        ],\r\n        \"endpoint\":\"urlendpoint1\",\r\n        \"secondaryEndpoint\":\"urlendpoint2\",\r\n        \"primaryAuthenticationKey\":\"primaryAuthenticationKey\",\r\n        \"secondaryAuthenticationKey\":\"secondaryAuthenticationKey\",\r\n        \"UserId\":\"user.id\"\r\n    }"
-      consumes:
-        - application/json
-        - text/json
-      parameters:
-        - in: body
-          name: body
-          description: ''
-          schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand
-      responses:
-        '200':
-          description: Success
-        '201':
-          description: Retorna o novo item criado
-        '400':
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.Http400'  
-        '422':
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-        '500':
-          description: Internal Server Error  
-          schema:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.HttpErrorDefault'
-  /Tests:
-    get:
-      tags:
-        - Tests
-      responses:
-        '200':
-          description: Success
-  '/Tests/{testId}/Results/File':
-    get:
-      tags:
-        - Tests
-      parameters:
-        - in: path
-          name: testId
-          required: true
-          type: string
-          format: uuid
-      responses:
-        '200':
-          description: Success
-  /Tests/Execution-Environments:
-    get:
-      tags:
-        - Tests
-      responses:
-        '200':
-          description: Success
-  '/TransactionData/{analysisId}':
-    get:
-      tags:
-        - UnitTests
-      parameters:
-        - in: path
-          name: analysisId
-          required: true
-          type: string
-          format: uuid
-        - in: query
-          name: entityId
           type: integer
-          format: int32
-        - in: query
-          name: executionEnvironmentId
+        - name: pageSize
+          description: Quantidade de registros na página
+          in: query
+          required: true
           type: integer
-          format: int32
+        - name: sortAsc
+          description: Ordenação ascendente
+          in: query
+          required: false
+          type: string
+          enum:
+              - version
+              - editorUserName
+              - updatedDateUtc
+        - name: sortDesc
+          description: Ordenação descendente
+          in: query
+          required: false
+          type: string
+          enum:
+              - version
+              - editorUserName
+              - updatedDateUtc
       responses:
-        '200':
-          description: Success
-  /UnitTests/Run:
+          '200':
+            description: Versões de uma determinada regra
+            schema:
+                $ref: '#/definitions/Rules.VersionResponse'
+  /Rules/{ruleId}/Orchestrator/Entities:
+    get:
+      tags:
+        - Rules
+      summary: 'Recupera a listagem de Orquestratores com suas entidades vinculadas filtradas por uma Rule'
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: ruleId
+          description: Identificador da regra (format= Guid)
+          required: true
+          type: string
+          format: Guid
+      responses:
+          '200':
+            description: Lista dos orquestradores com as suas entidades de uma determinada regra
+            schema:
+              $ref: '#/definitions/Rules.OrchestratorEntitites.Response'
+  /Rules/UpdateChain:
     post:
       tags:
-        - UnitTests
+        - Rules
+      summary: Atualizar Rule com orquestradores em cascata
       consumes:
         - application/json
-        - text/json
+      produces:
+        - application/json
       parameters:
-        - in: body
-          name: body
+        - name: body
+          description: Regra a ser alterada
+          in: body
+          required: true
           schema:
-            $ref: >-
-              #/definitions/Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest
+              $ref: '#/definitions/Rules.UpdateChainPostBody'
       responses:
         '200':
-          description: Success
+          description: 'Rule alterada'
+          schema:
+            $ref: '#/definitions/Rules.UpdateChainPostResponse'
+
 definitions:
-  Decision.Configuration.Api.Contracts.Fields.Update.UpdateFieldRequest:
-    type: object
-    properties:
-      name:
-        type: string
-      description:
-        type: string
-      length:
-        format: int32
-        type: integer
-  Decision.Configuration.API.Contracts.Tests.Unit.RunUnitTestRequest:
-    required:
-      - data
-      - executionEnvironment
-      - entityId
-      - subjectType
-      - subjectVersionId
-    type: object
-    properties:
-      subjectVersionId:
-        format: uuid
-        type: string
-      subjectType:
-        $ref: '#/definitions/Decision.Configuration.Domain.Tests.SubjectType'
-      data: {}
-      executionEnvironment:
-        format: int32
-        type: integer
-      entityId:
-        format: int32
-        type: integer
-        description: "Id da entidade que será testada (Utilizado para buscar a última versão do mapeamento de campos)"  
-  Decision.Configuration.Application.Features.Commands.UpdateChain: 
-      type: object
-      properties:
-        featureId:
-          type: string
-        featureVersionId:
-          type: string
-        Orchestrators:
-          type: array
-          items:
-            $ref: '#/definitions/Decision.Configuration.Application.Orchestrator.Commands.UpdateChainOrchestrator'
-  Decision.Configuration.Application.Orchestrator.Commands.UpdateChainOrchestrator:
-      type: object
-      properties:
-        OrchestratorId:
-          type: string
-  Decision.Configuration.Application.Features.Commands.HttpErrorDefault:
-      type: object
-      properties:
-          statusCode:
-            type: string
-            description: "Http Code referente ao erro"
-          Message:
-            type: string
-            description: "Mensagem referente aos erros"
-          Errors:
-            type: string
-            description: "Indica os erros"
-  Decision.Configuration.Application.Features.Commands.Http400:
-      type: object
-      properties:
-          type:
-            type: string
-            description: "Tipo do erro"
-          title:
-            type: string
-            description: "Título do erro"
-          status:
-            type: string
-            description: "Código Http do Erro"
-          traceId:
-            type: string
-            description: "TraceId do erro" 
-          errors:
-            type: array
-            items:
-              $ref: '#/definitions/Decision.Configuration.Application.Features.Commands.ErrosArray'
-            description: "Array com a descrição dos erros"    
-  Decision.Configuration.Application.Features.Commands.ErrosArray:
-      type: object
-      properties:
-        Description:
-          type: string
-          description: "Descrição do Erro"        
-  Decision.Configuration.API.Models.BatchTests.FinishBatchTestRequest:
-    type: object
-    required:
-      - testId
-    properties:
-      testId:
-        format: uuid
-        type: string
-  Decision.Configuration.API.Models.BatchTests.StartBatchTestRequest:
-    type: object
-    required:
-      - subjectType
-      - subjectVersionId
-      - entityId
-      - batchSize
-      - executionEnvironment
-    properties:
-      subjectType:
-        $ref: '#/definitions/Decision.Configuration.Domain.Tests.SubjectType'
-        description: "Tipo do item que será testado"
-      subjectVersionId:
-        format: uuid
-        type: string
-        description: "Id do item que será testada"
-      entityId:
-        format: int32
-        type: integer
-        description: "Id da entidade que será testada"
-      batchSize:
-        format: int32
-        type: integer
-        description: "Quantidade de testes"
-      executionEnvironment:
-        format: int32
-        type: integer
-        description: "Ambiente que será executado os testes"
-  'Decision.Configuration.Application.Commons.Pagination.PagedResponse`1[System.Collections.Generic.List`1[Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse]]':
-    type: object
-    properties:
-      pageNumber:
-        format: int32
-        type: integer
-      pageSize:
-        format: int32
-        type: integer
-      totalPages:
-        format: int32
-        type: integer
-      totalRecords:
-        format: int32
-        type: integer
-      data:
-        type: array
-        items:
-          type: array
-          items:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse
-  Decision.Configuration.Application.CustomerEntities.Commands.Create.CreateCustomerEntityCommand:
-    type: object
-    properties:
-      id:
-        format: int32
-        type: integer
-        x-nullable: true
-        description: "id da Entidade | Obrigatório"
-      name:
-        type: string
-        description: "Nome da Entidade | Obrigatório"
-  Decision.Configuration.Application.CustomerEntities.Commands.Create.CustomerEntityResponse:
-    type: object
-    properties:
-      id:
-        format: int32
-        type: integer
-        description: "id da Entidade | Obrigatório"
-      name:
-        type: string
-        description: "Nome da Entidade | Obrigatório"
-  Decision.Configuration.Application.Features.Commands.Create.CreateFeatureCommand:
-    type: object
-    required:
-      - name
-      - description
-      - sqlConnectionId
-      - dependencies
-      - sqlCode
-      - userInformation
-      - schemaName
-    properties:
-      name:
-        type: string
-        description: "Nome da Feature | Obrigatório"
-      creationUserId:
-        type: string
-        description: "Usuário que criou a Feature | Obrigatório"
-      caosName:
-        type: string
-        description: "Nome do Caos da Feature"
-      tags:
-        type: string
-        description: "Tags da Feature"
-      description:
-        type: string
-        description: "Descrição da Feature | Obrigatório"
-      sqlConnectionId:
-        format: uuid
-        type: string
-        description: "Id da Conexão da Sql da Feature | Obrigatório"
-      dependencies:
-        type: array
-        description: "Dependências da Feature | Obrigatório"
-        items:
-          $ref: >-
-            #/definitions/Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand
-      sqlCode:
-        type: string
-        description: "Código Sql da Feature | Obrigatório"
-      schemaName:
-        type: string
-        description: "Schema da Feature | Obrigatório"
-      timeout:
-        format: int32
-        type: integer
-        description: "Timeout da Feature"
-      userInformation:
-        description: "Dados do usuário | Obrigatório"
-        $ref: '#/definitions/Decision.Configuration.Application.Users.UserInformation'
-  Decision.Configuration.Application.Features.Commands.Create.CreateFeatureDependencyCommand:
-    type: object
-    required:
-      - source
-      - outputId
-      - alias
-    properties:
-      source:
-        $ref: >-
-          #/definitions/Decision.Configuration.Application.Features.DependencyType
-      outputId:
-        format: uuid
-        type: string
-        description: "Id da dependência (no caso de Feature é o Id obtido a partir do lookup de /api/v1/Features/Version/featureVersionId/Variable/Lookup) | Obrigatório"
-      alias:
-        type: string
-        description: "Alias da dependência | Obrigatório"
-  Decision.Configuration.Application.Features.DependencyType:
-    format: int32
-    enum:
-      - 0
-      - 1
-    description: "0 - Field | 1 - Feature | Obrigatório"
-    type: integer
-  Decision.Configuration.Application.Features.Queries.GetbyId.GetByIdFeatureQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-        description: "Id da Feature | Obrigatório"
-      versionId:
-        format: uuid
-        type: string
-        description: "Id da versão da Feature | Obrigatório"
-      key:
-        type: string
-        description: "Key da Feature"
-      name:
-        type: string
-        description: "Nome da Feature | Obrigatório"
-      Description:
-        type: string
-        description: "Descrição da Feature | Obrigatório"
-      caosName:
-        type: string
-        description: "Caos da Feature"
-      tags:
-        type: string
-        description: "Tags da Feature"
-      creationUserId:
-        type: string
-        description: "Usuário que criou a Feature | Obrigatório"
-      lastUpdateUserId:
-        type: string
-        description: "Último usuário a Editar a Feature | Obrigatório"
-      createdDateUtc:
-        format: date-time
-        type: string
-        description: "Data de criação da Feature | Obrigatório"
-      lastUpdatedDateUtc:
-        format: date-time
-        type: string
-        description: "Data edição da Feature | Obrigatório"
-      sqlCode:
-        type: string
-        description: "Código Sql da Feature | Obrigatório"
-      sqlConnectionId:
-        format: uuid
-        description: "Id da conexão Sql da Feature | Obrigatório"
-        type: string
-      sqlConnectionName:
-        type: string
-        description: "Nome da conexão Sql da Feature | Obrigatório"
-      deprecated:
-        type: boolean
-        description: "Indica que a Feature esta depreciada | Obrigatório"
-      status:
-        type: string
-        description: "Status da Feature (Rascunho, Publicado ou Depreciada)  | Obrigatório"
-      version:
-        type: string
-        description: "Versão da Feature (seguindo padrão SemVer) | Obrigatório"
-      dependencies:
-        type: array
-        items:
-          $ref: '#/definitions/Decision.Configuration.Application.Features.Responses.DependenciesResponse'
-      schemaName:
-        type: string
-        description: "Schema da Feature"
-      timeout:
-        format: int32
-        type: integer
-        description: "Timeout da Feature"
-  Decision.Configuration.Application.Features.Responses.DependenciesResponse:
+  Rules.Dependencies:
     type: object
     properties:
       source:
-        $ref: >-
-          #/definitions/Decision.Configuration.Application.Features.DependencyType
+        type: integer
+        enum:
+          - 0
+          - 1
+          - 2
       outputId:
-        format: uuid
         type: string
-        description: "Id da Dependência | Obrigatório"
       alias:
         type: string
-        description: "Alias da Dependência | Obrigatório"
+  Rules.FieldDependencies:
+    type: object
+    properties:
+      Id:
+        type: string
+      alias:
+        type: string
       name:
         type: string
-        description: "Nome da Dependência | Obrigatório"
-      version:
-        type: string
-        description: "Versão da Dependência | Obrigatório"
-      type:
-        type: string
-        description: "Tipo do dado da dependência (String, Int32, Boolean, Double, DateTime)"
       description:
         type: string
-        description: "Descrição da Dependência"
-      tags:
+  Rules.FeatureDependencies:
+    type: object
+    properties:
+      Id:
         type: string
-        description: "Tags da Dependência (Somente Feature)"
+      alias:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      version:
+        type: string
       variable:
         type: string
-        description: "Variável da Dependência (Somente Feature)"
-  Decision.Configuration.Application.Features.Commands.Update.UpdateFeatureCommand:
+  Rules.ModelDependencies:
+    type: object
+    properties:
+      Id:
+        type: string
+      alias:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      version:
+        type: string
+      variable:
+        type: string
+  Rules.RuleDependencies:
+    type: object
+    properties:
+      Id:
+        type: string
+      alias:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      version:
+        type: string
+      variable:
+        type: string
+      type:
+        type: string
+  Rules.Entities:
     type: object
     required:
       - id
       - name
-      - description
-      - sqlConnectionId
-      - dependencies
-      - sqlCode
-      - userInformation
-      - schemaName
     properties:
       id:
-        format: uuid
         type: string
-        description: "Id da Feature | Obrigatório"
-      key:
-        type: string
-        description: "Key da Feature"
+        format: Guid
       name:
         type: string
-        description: "Nome da Feature | Obrigatório"
-      tags:
+  Rules.ListResponse:
+      description: Listagem de regras para a tabela
+      type: object
+      required:
+          - pageNumber
+          - pageSize
+          - totalPages
+          - totalRecords
+          - data
+      properties:
+          pageNumber:
+              description: Número da página
+              type: integer
+          pageSize:
+              description: Quantidade de registros da página
+              type: integer
+          totalPages:
+              description: Quantidade de páginas
+              type: integer
+          totalRecords:
+              description: Quantidade de registros
+              type: integer
+          data:
+              description: Regras
+              type: array
+              items:
+                  description: Regras
+                  type: object
+                  required:
+                      - id
+                      - name
+                      - version
+                      - statusId
+                      - statusCode
+                      - lastUpdateUserId
+                      - lastUpdateUserName
+                      - lastUpdatedDateUtc
+                      - latestVersionId
+                  properties:
+                      id:
+                          description: Id da regra (format= Guid)
+                          type: string
+                          format: Guid
+                      name:
+                          description: Nome da regra
+                          type: string
+                      version:
+                          description: Versão da regra
+                          type: string
+                      statusId:
+                          description: Id do Status da regra
+                          type: integer
+                      statusCode:
+                          description: Status da regra
+                          type: string
+                          maxLength: 3
+                          minLength: 3
+                      lastUpdateUserId:
+                          description: Id do último usuário que alterou a regra
+                          type: string
+                      lastUpdateUserName:
+                          description: Nome e sobrenome do último usuário que alterou a regra
+                          type: string
+                      lastUpdatedDateUtc:
+                          description: Data de última alteração da regra (format= dateTime)
+                          type: string
+                          format: date-time
+                      latestVersionId:
+                          description: Id da última alteração da regra (format= Guid)
+                          type: string
+                          format: Guid
+  Rules.DetailResponse:
+    type: object
+    description: 'Detalhes de uma determinada regra'
+    required:
+      - id
+      - key
+      - version
+      - versionId
+      - name
+      - lastUpdateUserId
+      - lastUpdateUserName
+      - lastUpdatedDateUtc
+      - statusId
+      - statusCode
+      - rulesJson
+    properties:
+      id:
+        description: Id da regra (format= Guid)
         type: string
-        description: "Tags da Feature"
-      caosName:
+        format: Guid
+      key:
+        description: Chave da regra
         type: string
-        description: "Caos da Feature"
-      timeout:
-        format: int32
-        type: integer
-        description: "Timeout da Feature"
-      sqlCode:
+      version:
+        description: Versão da regra
         type: string
-        description: "Código Sql da Feature | Obrigatório"
-      sqlConnectionId:
-        format: uuid
+      versionId:
+        description: Id da versão da regra (format= Guid)
         type: string
-        description: "Id da conexão Sql da Feature | Obrigatório"
-      schemaName:
+        format: Guid
+      name:
+        description: Nome da regra
         type: string
-        description: "Schema da Feature | Obrigatório"
       description:
+        description: Descrição da regra
         type: string
-        description: "Descrição da Feature | Obrigatório"
-      userInformation:
-        description: "Dados do usuário | Obrigatório"
-        $ref: '#/definitions/Decision.Configuration.Application.Users.UserInformation'
       dependencies:
         type: array
-        description: "Dependências da Feature | Obrigatório"
         items:
-          $ref: >-
-            #/definitions/Decision.Configuration.Application.Features.Commands.Update.UpdateFeatureDependencyCommand
-  Decision.Configuration.Application.Features.Commands.Update.UpdateFeatureDependencyCommand:
-    type: object
-    required:
-      - source
-      - outputId
-      - alias
-    properties:
-      source:
-        $ref: >-
-          #/definitions/Decision.Configuration.Application.Features.DependencyType
-      outputId:
-        format: uuid
-        type: string
-        description: "Id da dependência (no caso de Feature é o Id obtido a partir do lookup de /api/v1/Features/Version/featureVersionId/Variable/Lookup) | Obrigatório"
-      alias:
-        type: string
-        description: "Alias da dependência | Obrigatório"          
-  Decision.Configuration.Application.Features.Queries.GetFeaturePreviewById.GetFeaturePreviewByIdQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-        description: "Id da Feature | Obrigatório"
-      name:
-        type: string
-        description: "Nome da Feature | Obrigatório"
-      version:
-        type: string
-        description: "Versão da Feature | Obrigatório"
+          $ref: '#/definitions/Rules.Dependencies'
       lastUpdateUserId:
+        description: Id do último usuário que alterou a regra
         type: string
-        description: "Último usuário a editar a Feature | Obrigatório"
-      lastUpdatedDateUtc:
-        format: date-time
-        type: string
-        description: "Data da última edição da Feature | Obrigatório"
-      sqlConnection:
-        type: string
-        description: "Conexão Sql da Feature | Obrigatório"
-      description:
-        type: string
-        description: "Descrição da Feature | Obrigatório"
-  Decision.Configuration.Application.Features.Queries.GetFeaturesLookup.GetFeaturesLookupQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-        description: "Id da Feature | Obrigatório"
-      name:
-        type: string
-        description: "Nome da Feature | Obrigatório"
-      description:
-        type: string
-  Decision.Configuration.Application.Features.Queries.GetFeatureVersionLookupByFeature.GetFeatureVersionLookupByFeatureQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-        description: "Id da versão da Feature | Obrigatório"
-      version:
-        type: string
-        description: "Versão da Feature | Obrigatório"
-  Decision.Configuration.Application.Commons.Pagination.PagedResponse.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse:
-    type: object
-    properties:
-      pageNumber:
-        format: int32
-        type: integer
-      pageSize:
-        format: int32
-        type: integer
-      totalPages:
-        format: int32
-        type: integer
-      totalRecords:
-        format: int32
-        type: integer
-      data:
-        type: array
-        items:
-          type: array
-          items:
-            $ref: '#/definitions/Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse'      
-  Decision.Configuration.Application.Features.Queries.GetAll.GetAllFeatureQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-      name:
-        type: string
-      sqlConnection:
-        type: string
-      lastUpdateUserId:
+      lastUpdateUserName:
+        description: Nome e sobrenome do último usuário que alterou a regra
         type: string
       lastUpdatedDateUtc:
+        description: Data de última alteração da regra (format= dateTime)
+        type: string
         format: date-time
-        type: string          
-  Decision.Configuration.Application.Features.Queries.GetFeatureVersionVariableByFeatureId.GetFeatureVersionVariableLookupByFeatureVersionQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
+      statusId:
+        description: Status da regra
+        type: integer
+      statusCode:
+        description: Código do status da regra
         type: string
-        description: "Id da variável da Feature | Obrigatório"
-      name:
+        maxLength: 3
+        minLength: 3
+      rulesJson:
         type: string
-        description: "Nome da variável da Feature | Obrigatório"
-  Decision.Configuration.Application.Sql.Queries.GetSqlConnectionLookup.GetSqlConnectionLookupQueryResponse:
-    type: object
-    properties:
-      id:
-        format: uuid
-        type: string
-        description: "Id da conexão Sql | Obrigatório"
-      name:
-        type: string
-        description: "Nome da conexão Sql | Obrigatório"
-  Decision.Configuration.Application.Fields.Queries.GetFieldsLookup.FieldsLookupResponse:
-    type: object
-    properties:
-      id:
-        type: string
-        description: "Identificador do Field"
-        format: uuid 
-      name:
-        type: string
-        description: "Nome do Field"
-      description:
-        type: string
-        description: "Descrição do Field"          
-  Decision.Configuration.Application.Orchestrator.Commands.GetOrchestratorWithEntities:    
-     type: object
-     properties:
-        id:
-          type: string
-          description: "Identificador do Orquestrator | Obrigatório"
-          format: uuid
-        name:
-          type: string
-          description: "Nome do Orquestrator | Obrigatório"
-        Entities:
-          type: array
-          items:
-            $ref: >-
-              #/definitions/Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities
-  Decision.Configuration.Application.Entities.Commands.GetOrchestratorWithEntities: 
+  Rules.PreviewResponse:
+      description: Preview de uma determinada regra
       type: object
+      required:
+        - id
+        - version
+        - versionId
+        - name
+        - lastUpdateUserId
+        - lastUpdateUserName
+        - lastUpdatedDateUtc
+        - statusId
+        - statusCode
+        - key
       properties:
-        EntityId:
+        id:
+          description: Id da regra (format= Guid)
           type: string
-          description: "Identificador da Entidade"
-          format: uuid
+          format: Guid
+        version:
+          description: Versão da regra
+          type: string
+        versionId:
+          description: Id da versão da regra (format= Guid)
+          type: string
+          format: Guid
         name:
+          description: Nome da regra
           type: string
-          description: "Nome da Entidade"
-  Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelCommand:
+        lastUpdateUserId:
+          description: Id do último usuário que alterou a regra
+          type: string
+        lastUpdateUserName:
+          description: Nome e sobrenome do último usuário que alterou a regra
+          type: string
+        lastUpdatedDateUtc:
+          description: Data de última alteração da regra (format= dateTime)
+          type: string
+          format: date-time
+        statusId:
+          description: Status da regra
+          type: integer
+        statusCode:
+          description: Código do status da regra
+          type: string
+          maxLength: 3
+          minLength: 3
+        key:
+          description: Chave da regra
+          type: string
+        description:
+          description: Descrição da regra
+          type: string
+        dependencies:
+          type: array
+          items:
+            $ref: '#/definitions/Rules.Dependencies'
+  Rules.VersionResponse:
+      description: Listagem de regras para a tabela
+      type: object
+      required:
+          - pageNumber
+          - pageSize
+          - totalPages
+          - totalRecords
+          - data
+      properties:
+          pageNumber:
+              description: Número da página
+              type: integer
+          pageSize:
+              description: Quantidade de registros da página
+              type: integer
+          totalPages:
+              description: Quantidade de páginas
+              type: integer
+          totalRecords:
+              description: Quantidade de registros
+              type: integer
+          data:
+              description: Regras
+              type: array
+              items:
+                  description: Regras
+                  type: object
+                  required:
+                      - id
+                      - versionId
+                      - version
+                      - editorId
+                      - editorName
+                      - updatedDateUtc
+                  properties:
+                      id:
+                          description: Id da regra (format= Guid)
+                          type: string
+                          format: Guid
+                      versionId:
+                          description: Id da versão da regra (format= Guid)
+                          type: string
+                          format: Guid
+                      version:
+                          description: Versão da regra
+                          type: string
+                      editorId:
+                          description: Id do usuário que alterou a versão da regra
+                          type: string
+                      editorName:
+                          description: Nome e sobrenome do usuário que alterou a versão da regra
+                          type: string
+                      updatedDateUtc:
+                          description: Data de alteração da versão da regra (format= dateTime)
+                          type: string
+                          format: date-time
+  Rules.PostBody:
     type: object
     required:
       - name
-      - description
-      - dependencies
+      - FieldDependencies
+      - FeatureDependencies
+      - ModelDependencies
+      - ruleMetStatusCode
+      - ruleMetStatusId
+      - rulesJson
       - userId
     properties:
       name:
         type: string
-        description: "Nome do Modelo | Obrigatório"
+        description: 'Nome da regra'
       description:
         type: string
-        description: "Descrição do Modelo | Obrigatório"
-      tags:
-        type: string
-        description: "Tags do Modelo"
-      dependencies:
+        description: 'Descrição da regra'
+      FieldDependencies:
         type: array
         items:
-          $ref: >-
-            #/definitions/Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelDependencyCommand
-      endpoint:
+          $ref: '#/definitions/Rules.FieldDependencies'
+      FeatureDependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.FeatureDependencies'
+      ModelDependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.ModelDependencies'
+      ruleMetStatusCode:
         type: string
-        description: "Primeiro endpoint do Modelo"
-      secondaryendpoint:
+        maxLength: 3
+        minLength: 3
+      ruleMetStatusId:
+        type: integer
+      rulesJson:
         type: string
-        description: "Segundo endpoint do Modelo"
-      primaryauthenticationkey:
-        type: string
-        description: "Primeira chave autenticação do Modelo"
-      secondaryauthenticationkey:
-        type: string
-        description: "Segunda chave autenticação do Modelo"
       userId:
         type: string
-  Decision.Configuration.Application.StatisticalModels.Commands.Create.CreateStatisticalModelDependencyCommand:
+        description: 'Usuário que inclui a regra (p. ex.: andre.castro)'
+  Rules.PostResponse:
     type: object
     required:
-      - source
-      - outputId
-      - alias
-    properties:
-      source:
-        $ref: >-
-          #/definitions/Decision.Configuration.Application.StatisticalModels.DependencyType
-      outputId:
-        format: uuid
-        type: string
-        description: "Id da dependência do Modelo | Obrigatório"
-      alias:
-        type: string
-        description: "Alias da dependência do Modelo | Obrigatório"
-  Decision.Configuration.Application.StatisticalModels.DependencyType:
-    format: int32
-    enum:
-      - 0
-      - 1
-      - 2
-    description: "0 - Field | 1 - Feature | 2 - Modelo | Obrigatório"
-    type: integer
-  Decision.Configuration.Application.Users.UserInformation:
-    type: object
+      - id
+      - key
+      - versionId
+      - name
+      - dependencies
+      - ruleMetStatusCode
+      - ruleMetStatusId
+      - rulesJson
     properties:
       id:
         type: string
-        description: "Id do usuário | Obrigatório"
-      email:
+        format: Guid
+      key:
         type: string
-        description: "E-mail do usuário | Obrigatório"
-  Decision.Configuration.Domain.Tests.SubjectType:
-    format: int32
-    enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-    description: "1 - Feature | 2 - StatisticalModel | 3 - Rule | 4 - DecisionFlow | 5 - Orchestrator"  
-    type: integer
-  Microsoft.AspNetCore.Mvc.ProblemDetails:
-    type: object
-    properties:
-      type:
+      versionId:
         type: string
-      title:
+        format: Guid
+      name:
         type: string
-      status:
-        format: int32
+      description:
+        type: string
+      dependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.Dependencies'
+      ruleMetStatusCode:
+        type: string
+        maxLength: 3
+        minLength: 3
+      ruleMetStatusId:
         type: integer
-      detail:
+      rulesJson:
         type: string
-      instance:
+  Rules.PutBody:
+    type: object
+    required:
+      - id
+      - key
+      - versionId
+      - name
+      - FieldDependencies
+      - FeatureDependencies
+      - ModelDependencies
+      - ruleMetStatusCode
+      - ruleMetStatusId
+      - rulesJson
+      - userId
+    properties:
+      id:
         type: string
-    additionalProperties: {}
+        format: Guid
+      key:
+        type: string
+      versionId:
+        type: string
+        format: Guid
+      name:
+        type: string
+      description:
+        type: string
+      FieldDependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.FieldDependencies'
+      FeatureDependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.FeatureDependencies'
+      ModelDependencies:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.ModelDependencies'
+      ruleMetStatusCode:
+        type: string
+        maxLength: 3
+        minLength: 3
+      ruleMetStatusId:
+        type: integer
+      rulesJson:
+        type: string
+      userId:
+        type: string
+  Rules.OrchestratorEntitites.Response:
+    type: object
+    required:
+      - id
+      - name
+      - entities
+    properties:
+      id:
+        type: string
+        format: Guid
+      name:
+        type: string
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.Entities'
+  Rules.Orchestrators:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: Guid
+  Rules.UpdateChainPostBody:
+    type: object
+    required:
+      - id
+      - versionId
+      - orchestrators
+    properties:
+      id:
+        type: string
+        format: Guid
+      versionId:
+        type: string
+        format: Guid
+      reason:
+        type: string
+      orchestrators:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.Orchestrators'
+  Rules.UpdateChainPostResponse:
+    type: object
+    required:
+      - id
+      - name
+      - orchestrators
+    properties:
+      id:
+        type: string
+        format: Guid
+      name:
+        type: string
+      orchestrators:
+        type: array
+        items:
+          $ref: '#/definitions/Rules.Orchestrators'
